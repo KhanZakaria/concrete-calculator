@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concrete Calculator</title>
+    <link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+    <section class="concreteCalculator">
+       <div class="container">
+            <div class="calculator">
+                <h1>Concrete Calculator</h1>
+                <div class="topfields fields">
+                    <h2>Concrete qty in m3</h2>
+                    <span><input id="Qty-m3" class="input" type="number" value="1" min="1" max="99999"/></span>
+                    <h3 > M3</h3>
+                </div>
+
+                <div class="fields">
+                    <h2  class="column">Cement</h2>
+                    <span  class="column"><input id="Cement" class="input" type="number" value="1" min="1" max="99999"/></span>
+                    <span id="Cement-Value"  class="column value">14.6667</span>
+                    <h3  class="column"> BAGS</h3>
+                </div>
+
+                <div class="fields">
+                    <h2  class="column">Sand</h2>
+                    <span  class="column"><input id="Sands" class="input" type="number" value="1" min="1" max="99999"/></span>
+                    <span  id="Sands-Value" class="column value">0.51333</span>
+                    <h3  class="column"> M3</h3>
+                </div>
+
+
+                <div class="fields">
+                    <h2  class="column">Aggregate</h2>
+                    <span  class="column"><input id="Aggregate" class="input" type="number" value="1" min="1" max="99999"/></span>
+                    <span  id="Aggregate-Value" class="column value">0.51333</span>
+                    <h3  class="column"> M3</h3>
+                </div>
+
+            </div>
+       </div>
+    </section>
+
+    <script>
+
+        // configuration
+        let decimal_to_show = 5;
+
+
+        // get all the inputs
+        const inputElements = document.querySelectorAll('.input');
+
+        //get the total elements 
+
+        const totalElements = [
+            document.getElementById('Cement-Value'),
+            document.getElementById('Sands-Value'),
+            document.getElementById('Aggregate-Value')
+        ]
+
+        // all the input fields 
+        
+        let cement_text = document.getElementById("Cement-Value");
+        let sands_text = document.getElementById("Sands-Value");
+        let aggregate_text = document.getElementById("Aggregate-Value");
+
+
+        // all the input values
+
+        let qty_m3 =parseInt(document.getElementById("Qty-m3").value);
+        let cement = parseInt(document.getElementById("Cement").value);
+        let sands = parseInt(document.getElementById("Sands").value);
+        let aggregate = parseInt(document.getElementById("Aggregate").value);
+
+        let cement_value = parseFloat(document.getElementById("Cement-Value").textContent);
+        let sands_value = parseFloat(document.getElementById("Sands-Value").textContent);
+        let aggregate_value = parseFloat(document.getElementById("Aggregate-Value").textContent);
+
+      
+        // Function to update the total value for a specific input
+
+        function update(event){
+            return function(event){
+                let Changed_field_id = event.target.id;
+               
+                switch(Changed_field_id){
+                    case 'Qty-m3' : qty_m3 = parseInt(event.target.value);
+                        break;
+                    case 'Cement' : cement= parseInt(event.target.value);
+                        break;
+                    case 'Sands' : sands = parseInt(event.target.value);
+                        break;
+                    case 'Aggregate' : aggregate = parseInt(event.target.value);
+                        break;
+                    default : console.log('NOthing Change');
+                }
+
+                 //total updated value
+
+                 let User_inputed_total_value = cement + sands + aggregate;
+
+                 cement_value = cement / User_inputed_total_value * 1.54 / 0.035 * qty_m3;
+
+                 sands_value = sands / User_inputed_total_value * 1.54 * qty_m3;
+
+                 aggregate_value = aggregate / User_inputed_total_value * 1.54 * qty_m3;
+
+                 
+                 // push the value to the display 
+
+                cement_text.textContent = parseFloat(cement_value).toFixed(decimal_to_show);
+                sands_text.textContent = parseFloat(sands_value).toFixed(decimal_to_show) ;
+                aggregate_text.textContent = parseFloat(aggregate_value).toFixed(decimal_to_show); 
+                
+
+            }
+        }
+
+        // add event listener and call the update function to listen the change
+
+        inputElements.forEach((input)=> {
+            input.addEventListener('input' , update());
+    
+        });
+
+        // call the function for each input and get the changes 
+
+        inputElements.forEach((input , event ) => {
+            update(event)();
+        });
+
+
+
+    </script>
+
+</body>
+</html>
